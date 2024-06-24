@@ -14,6 +14,18 @@ if G.GAME.current_round.hands_left < 1 then
 '''
 match_indent = true
 
+# prevent a dumbass bug by preventing a piece of code from running? why does this run?? thunk????
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "if #G.hand.cards < 1 and #G.deck.cards < 1 and #G.play.cards < 1 then"
+position = "after"
+payload = '''
+end
+if this_should_never_run_vg3dcw2vgubhijonbi then
+'''
+match_indent = true
+
 # dumb code to swap colour, updates every frame (lmfao)
 [[patches]]
 [patches.pattern]
