@@ -12,12 +12,22 @@
 ------------MOD CODE -------------------------
 
 G.FUNCS.njy_can_endround = function(e)
-	if G.GAME.chips - G.GAME.blind.chips >= 0 then
-		e.config.colour = G.C.GREEN
-		e.config.button = 'njy_endround'
+	if SMODS.Mods['Talisman'] then
+		if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
+			e.config.colour = G.C.GREEN
+			e.config.button = 'njy_endround'
+		else
+			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+			e.config.button = nil
+		end
 	else
-		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-		e.config.button = nil
+		if G.GAME.chips - G.GAME.blind.chips >= 0 then
+			e.config.colour = G.C.GREEN
+			e.config.button = 'njy_endround'
+		else
+			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+			e.config.button = nil
+		end
 	end
 end
 
