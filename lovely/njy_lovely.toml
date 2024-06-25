@@ -71,7 +71,7 @@ pattern = "self.C.DARK_EDITION[2] = math.min(self.C.DARK_EDITION[3], self.C.DARK
 position = "after"
 payload = '''
 	if self.GAME and self.GAME.chips and self.GAME.blind and self.GAME.blind.chips then
-		if SMODS.Mods['Talisman'] then
+		if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
 			if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
 				self.C.CHIPS_REQUIRED[1] = 0.2941
 				self.C.CHIPS_REQUIRED[2] = 0.76

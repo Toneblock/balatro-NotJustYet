@@ -11,8 +11,8 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
-G.FUNCS.njy_can_endround = function(e)
-	if SMODS.Mods['Talisman'] then
+G.FUNCS.njy_can_endround = function(e)	-- wtf is this talisman check?
+	if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
 		if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
 			e.config.colour = G.C.GREEN
 			e.config.button = 'njy_endround'
