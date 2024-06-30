@@ -11,6 +11,14 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
+-- The variable below defines the keybind used for ending the round. Feel free to change it to anything else, like 'w', or 'enter'
+
+G.njy_keybind = 'lshift'
+
+
+
+
+
 G.FUNCS.njy_can_endround = function(e)	-- wtf is this talisman check?
 	if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
 		if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then

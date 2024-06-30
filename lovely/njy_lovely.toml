@@ -132,3 +132,30 @@ payload = '''
 CHIPS_REQUIRED = {0,0,0,1},
 '''
 match_indent = true
+
+# add keybind for ending round
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = "if key == 'v' then"
+position = "before"
+payload = '''
+if key == G.njy_keybind then
+	if G.STATE_COMPLETE == true and G.buttons and G.buttons.states and G.buttons.states.visible and G.buttons.states.visible == true and G.GAME and G.GAME.chips and G.GAME.blind and G.GAME.blind.chips then
+		if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
+			if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
+				stop_use()
+				G.STATE = G.STATES.NEW_ROUND
+				end_round()
+			end
+		else
+			if G.GAME.chips - G.GAME.blind.chips >= 0 then
+				stop_use()
+				G.STATE = G.STATES.NEW_ROUND
+				end_round()
+			end
+		end
+	end
+end
+'''
+match_indent = true
