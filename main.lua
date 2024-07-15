@@ -19,23 +19,16 @@ G.njy_keybind = 'lshift'
 
 
 
-G.FUNCS.njy_can_endround = function(e)	-- wtf is this talisman check?
-	if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
-		if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
-			e.config.colour = G.C.GREEN
-			e.config.button = 'njy_endround'
-		else
-			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-			e.config.button = nil
-		end
+G.FUNCS.njy_can_endround = function(e)	-- wtf is this talisman check? [[Fixed it! -Math]]
+	if not to_big then
+		function to_big(x) return x end
+	end
+	if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) then
+		e.config.colour = G.C.GREEN
+		e.config.button = 'njy_endround'
 	else
-		if G.GAME.chips - G.GAME.blind.chips >= 0 then
-			e.config.colour = G.C.GREEN
-			e.config.button = 'njy_endround'
-		else
-			e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-			e.config.button = nil
-		end
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
 	end
 end
 
