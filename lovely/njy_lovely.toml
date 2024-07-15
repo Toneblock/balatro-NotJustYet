@@ -71,26 +71,17 @@ pattern = "self.C.DARK_EDITION[2] = math.min(self.C.DARK_EDITION[3], self.C.DARK
 position = "after"
 payload = '''
 	if self.GAME and self.GAME.chips and self.GAME.blind and self.GAME.blind.chips then
-		if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
-			if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
-				self.C.CHIPS_REQUIRED[1] = 0.2941
-				self.C.CHIPS_REQUIRED[2] = 0.76
-				self.C.CHIPS_REQUIRED[3] = 0.5725
-			else
-				self.C.CHIPS_REQUIRED[1] = 1
-				self.C.CHIPS_REQUIRED[2] = 0.3725
-				self.C.CHIPS_REQUIRED[3] = 0.3333
-			end
+		if not to_big then
+			function to_big(x) return x end
+		end
+		if to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips) then
+			self.C.CHIPS_REQUIRED[1] = 0.2941
+			self.C.CHIPS_REQUIRED[2] = 0.76
+			self.C.CHIPS_REQUIRED[3] = 0.5725
 		else
-			if self.GAME.chips - self.GAME.blind.chips >= 0 then
-				self.C.CHIPS_REQUIRED[1] = 0.2941
-				self.C.CHIPS_REQUIRED[2] = 0.76
-				self.C.CHIPS_REQUIRED[3] = 0.5725
-			else
-				self.C.CHIPS_REQUIRED[1] = 1
-				self.C.CHIPS_REQUIRED[2] = 0.3725
-				self.C.CHIPS_REQUIRED[3] = 0.3333
-			end
+			self.C.CHIPS_REQUIRED[1] = 1
+			self.C.CHIPS_REQUIRED[2] = 0.3725
+			self.C.CHIPS_REQUIRED[3] = 0.3333
 		end
 	else
 		self.C.CHIPS_REQUIRED[1] = 1
@@ -142,20 +133,14 @@ position = "before"
 payload = '''
 if key == G.njy_keybind then
 	if G.STATE_COMPLETE == true and G.buttons and G.buttons.states and G.buttons.states.visible and G.buttons.states.visible == true and G.GAME and G.GAME.chips and G.GAME.blind and G.GAME.blind.chips then
-		if SMODS.Mods['Talisman'] and (Talisman.config_file.break_infinity == true) then
-			if Big:new(G.GAME.chips) >= Big:new(G.GAME.blind.chips) then
-				stop_use()
-				G.STATE = G.STATES.NEW_ROUND
-				end_round()
-			end
-		else
-			if G.GAME.chips - G.GAME.blind.chips >= 0 then
-				stop_use()
-				G.STATE = G.STATES.NEW_ROUND
-				end_round()
-			end
+		if not to_big then
+			function to_big(x) return x end
 		end
-	end
+		if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) then
+			stop_use()
+			G.STATE = G.STATES.NEW_ROUND
+			end_round()
+		end
 end
 '''
 match_indent = true
