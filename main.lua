@@ -11,9 +11,12 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
--- The variable below defines the keybind used for ending the round. Feel free to change it to anything else, like 'w', or 'enter'
+-- The variable below defines the keybind used for ending the round. Feel free to change it to anything else, like 'w', or '9'
 
 G.njy_keybind = 'lshift'
+
+
+
 
 
 
