@@ -13,7 +13,7 @@ payload = '''
 if not to_big then
 	function to_big(x) return x end
 end
-if (G.GAME.current_round.hands_left < 1 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
+if (G.GAME.current_round.hands_left <= 0 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
 '''
 match_indent = true
 
@@ -27,7 +27,7 @@ payload = '''
 if not to_big then
 	function to_big(x) return x end
 end
-if (G.GAME.current_round.hands_left < 1 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
+if (G.GAME.current_round.hands_left <= 0 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
 '''
 match_indent = true
 
@@ -41,7 +41,7 @@ payload = '''
 if not to_big then
 	function to_big(x) return x end
 end
-if (G.GAME.current_round.hands_left < 1 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
+if (G.GAME.current_round.hands_left <= 0 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
 '''
 match_indent = true
 
@@ -169,3 +169,24 @@ end
 '''
 match_indent = true
 
+# prevent overplaying hands... oops
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5 then'''
+position = "at"
+payload = '''
+if G.GAME.current_round.hands_left <= 0 or #G.hand.highlighted <= (G.GAME.blind and G.GAME.blind.name == 'cry-Sapphire Stamp' and 1 or 0) or G.GAME.blind.block_play then 
+'''
+match_indent = true
+
+# cryptid override
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if #G.hand.highlighted <= (G.GAME.blind and G.GAME.blind.name == 'cry-Sapphire Stamp' and 1 or 0) or G.GAME.blind.block_play then'''
+position = "at"
+payload = '''
+if G.GAME.current_round.hands_left <= 0 or #G.hand.highlighted <= (G.GAME.blind and G.GAME.blind.name == 'cry-Sapphire Stamp' and 1 or 0) or G.GAME.blind.block_play then
+'''
+match_indent = true
