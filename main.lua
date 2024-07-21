@@ -7,6 +7,7 @@
 --- PRIORITY: 0
 --- DISPLAY_NAME: NotJustYet
 --- BADGE_COLOUR: ffffff
+--- VERSION: 0.4.2
 
 ----------------------------------------------
 ------------MOD CODE -------------------------

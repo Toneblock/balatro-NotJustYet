@@ -190,3 +190,15 @@ payload = '''
 if G.GAME.current_round.hands_left <= 0 or #G.hand.highlighted <= (G.GAME.blind and G.GAME.blind.name == 'cry-Sapphire Stamp' and 1 or 0) or G.GAME.blind.block_play then
 '''
 match_indent = true
+
+# bugfix to make running out of cards properly end round (prevents double-end attempts)
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''if #G.hand.cards < 1 and #G.deck.cards < 1 then'''
+position = "after"
+payload = '''
+stop_use()
+G.STATE = G.STATES.NEW_ROUND
+'''
+match_indent = true
