@@ -14,6 +14,7 @@ if not to_big then
 	function to_big(x) return x end
 end
 if (G.GAME.current_round.hands_left <= 0 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
+	stop_use()
 '''
 match_indent = true
 
@@ -28,6 +29,7 @@ if not to_big then
 	function to_big(x) return x end
 end
 if (G.GAME.current_round.hands_left <= 0 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
+	stop_use()
 '''
 match_indent = true
 
@@ -42,6 +44,7 @@ if not to_big then
 	function to_big(x) return x end
 end
 if (G.GAME.current_round.hands_left <= 0 and to_big(self.GAME.chips) < to_big(self.GAME.blind.chips)) or (GLOBAL_njy_vanilla_override and to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips)) then
+	stop_use()
 '''
 match_indent = true
 
@@ -50,52 +53,64 @@ match_indent = true
 [patches.pattern]
 target = "game.lua"
 pattern = "if #G.hand.cards < 1 and #G.deck.cards < 1 and #G.play.cards < 1 then"
-position = "after"
+position = "at"
 payload = '''
-end
-if this_should_never_run_vg3dcw2vgubhijonbi then
+if not true then
 '''
 match_indent = true
 
-# add ugly end round button
+# add slightly less ugly end round button
 [[patches]]
 [patches.pattern]
 target = "functions/UI_definitions.lua"
-pattern = '''G.SETTINGS.play_button_pos == 1 and play_button or discard_button,'''
-position = "after"
+pattern = '''G.SETTINGS.play_button_pos == 1 and discard_button or play_button,'''
+position = "before"
 payload = '''
-{n=G.UIT.R, config={id = 'njy_endround_button',align = "tm", padding = 0.3, r = 0.1, minw = 2.5, minh = button_height, hover = true, colour = G.C.GREEN, button = "njy_endround", one_press = true, shadow = true, func = 'njy_can_endround'}, nodes={
+{n=G.UIT.C, config={id = 'njy_end_button',align = "tm", padding = 0.3, r = 0.1, minw = 1.3, minh = button_height, hover = true, colour = G.C.GREEN, button = "njy_attempt_endround", one_press = true, shadow = true, func = 'njy_can_endround'}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-        {n=G.UIT.T, config={text = "End Round", scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
+        {n=G.UIT.T, config={text = "End", scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
       }}
-    }}
+    }},
 '''
 match_indent = true
 
-# REALLY dumb code to swap colour, updates every frame (lmfao)
+# move buttons to correct position
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''config = {align="bm", offset = {x=0,y=0.3},major = G.hand, bond = 'Weak'}'''
+position = "at"
+payload = '''
+config = {align="bm", offset = {x=-0.65,y=0.3},major = G.hand, bond = 'Weak'}
+'''
+match_indent = true
+
+# i TRIED to change this but nothing works??????????????????? code looks bad but genuinely, just doing "self.C.CHIPS_REQUIRED = {0.2941,0.76,0.5725,1}" doesn't work, pls explain
 [[patches]]
 [patches.pattern]
 target = "game.lua"
 pattern = "self.C.DARK_EDITION[2] = math.min(self.C.DARK_EDITION[3], self.C.DARK_EDITION[1])"
 position = "after"
 payload = '''
+	local njy_red = self.C.RED
+	local njy_green = self.C[G.njy_colour]
 	if self.GAME and self.GAME.chips and self.GAME.blind and self.GAME.blind.chips then
 		if not to_big then
 			function to_big(x) return x end
 		end
 		if to_big(self.GAME.chips) >= to_big(self.GAME.blind.chips) then
-			self.C.CHIPS_REQUIRED[1] = 0.2941
-			self.C.CHIPS_REQUIRED[2] = 0.76
-			self.C.CHIPS_REQUIRED[3] = 0.5725
+			self.C.CHIPS_REQUIRED[1] = njy_green[1]
+			self.C.CHIPS_REQUIRED[2] = njy_green[2]
+			self.C.CHIPS_REQUIRED[3] = njy_green[3]
 		else
-			self.C.CHIPS_REQUIRED[1] = 1
-			self.C.CHIPS_REQUIRED[2] = 0.3725
-			self.C.CHIPS_REQUIRED[3] = 0.3333
+			self.C.CHIPS_REQUIRED[1] = njy_red[1]
+			self.C.CHIPS_REQUIRED[2] = njy_red[2]
+			self.C.CHIPS_REQUIRED[3] = njy_red[3]
 		end
 	else
-		self.C.CHIPS_REQUIRED[1] = 1
-		self.C.CHIPS_REQUIRED[2] = 0.3725
-		self.C.CHIPS_REQUIRED[3] = 0.3333
+		self.C.CHIPS_REQUIRED[1] = njy_red[1]
+		self.C.CHIPS_REQUIRED[2] = njy_red[2]
+		self.C.CHIPS_REQUIRED[3] = njy_red[3]
 	end
 '''
 match_indent = true
@@ -118,7 +133,7 @@ target = "functions/common_events.lua"
 pattern = "{n=G.UIT.T, config={text = G.GAME.blind.chip_text, scale = scale_number(G.GAME.blind.chips, scale, 100000), colour = G.C.RED, shadow = true}}"
 position = "at"
 payload = '''
-{n=G.UIT.T, config={text = G.GAME.blind.chip_text, scale = scale_number(G.GAME.blind.chips, scale, 100000), colour = G.C.GREEN, shadow = true}}
+{n=G.UIT.T, config={text = G.GAME.blind.chip_text, scale = scale_number(G.GAME.blind.chips, scale, 100000), colour = G.C[G.njy_colour], shadow = true}}
 '''
 match_indent = true
 
@@ -126,10 +141,10 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "globals.lua"
-pattern = "RED = HEX('FE5F55'),"
+pattern = "self.keybind_mapping = {{"
 position = "before"
 payload = '''
-CHIPS_REQUIRED = {0,0,0,1},
+self.C.CHIPS_REQUIRED = {0, 0, 0, 1}
 '''
 match_indent = true
 
@@ -147,9 +162,7 @@ if key == G.njy_keybind then
 			function to_big(x) return x end
 		end
 		if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) then
-			stop_use()
-			G.STATE = G.STATES.NEW_ROUND
-			end_round()
+			G.FUNCS.njy_attempt_endround()	-- idk what to put in this function man
 		end
 	end
 end
@@ -191,14 +204,15 @@ if G.GAME.current_round.hands_left <= 0 or #G.hand.highlighted <= (G.GAME.blind 
 '''
 match_indent = true
 
-# bugfix to make running out of cards properly end round (prevents double-end attempts)
+# prevents double-end attempts
 [[patches]]
 [patches.pattern]
 target = "game.lua"
 pattern = '''if #G.hand.cards < 1 and #G.deck.cards < 1 then'''
 position = "after"
 payload = '''
-stop_use()
-G.STATE = G.STATES.NEW_ROUND
+	G.FUNCS.njy_attempt_endround()
+end
+if not true then
 '''
 match_indent = true
