@@ -5,7 +5,7 @@
 
 This mod contains a slightly customisable **keybind** and **colour**. To change them, you can open the mod's **main.lua** and edit the variables directly. They are defaulted to '**lshift**' and '**GREEN**'
 
-Holding the keybind while scoring a winning hand will mimic vanilla behaviour, in cases where you want to avoid drawing more cards
+Holding the keybind while scoring a winning hand will mimic vanilla behaviour, useful in cases where you want to avoid drawing more cards
 
 # Installation
 
