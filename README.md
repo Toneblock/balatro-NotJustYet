@@ -1,12 +1,11 @@
 # NotJustYet
-(Steamodded 1.0) Prevents scoring from ending the round early
+**(Steamodded 1.0)** Prevents scoring from ending the round early
 
+# Info
 
-Default keybind is 'LShift'. This is customizable via the main.lua, although I'm not exactly sure what keys work
+This mod contains a slightly customisable **keybind** and **colour**. To change them, you can open the mod's **main.lua** and edit the variables directly. They are defaulted to '**lshift**' and '**GREEN**'
 
-You can also customize the colour used (default: 'GREEN') in the same place
-
-Holding the keybind during the end of a scoring hand will mimic vanilla behavior, useful in cases where you do not want to draw extra cards
+Holding the keybind while scoring a winning hand will mimic vanilla behaviour, in cases where you want to avoid drawing more cards
 
 # Installation
 
