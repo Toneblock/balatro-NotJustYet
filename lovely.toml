@@ -59,18 +59,18 @@ if not true then
 '''
 match_indent = true
 
-# add slightly less ugly end round button
+# actions compat?
 [[patches]]
 [patches.pattern]
 target = "functions/UI_definitions.lua"
-pattern = '''G.SETTINGS.play_button_pos == 1 and discard_button or play_button,'''
-position = "before"
+pattern = '''G.SETTINGS.play_button_pos == 1 and play_button or discard_button,'''
+position = "after"
 payload = '''
-{n=G.UIT.C, config={id = 'njy_end_button',align = "tm", padding = 0.3, r = 0.1, minw = 1.3, minh = button_height, hover = true, colour = G.C.GREEN, button = "njy_attempt_endround", one_press = true, shadow = true, func = 'njy_can_endround'}, nodes={
+GLOBAL_njy_action and {n=G.UIT.C, config={id = 'njy_end_button',align = "tm", padding = 0.3, r = 0.1, minw = 1.3, minh = button_height, hover = true, colour = G.C.GREEN, button = "njy_attempt_endround", one_press = true, shadow = true, func = 'njy_can_endround'}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
         {n=G.UIT.T, config={text = "End", scale = text_scale, colour = G.C.UI.TEXT_LIGHT, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}
       }}
-    }},
+    }} or nil,
 '''
 match_indent = true
 
@@ -81,7 +81,7 @@ target = "game.lua"
 pattern = '''config = {align="bm", offset = {x=0,y=0.3},major = G.hand, bond = 'Weak'}'''
 position = "at"
 payload = '''
-config = {align="bm", offset = {x=-0.65,y=0.3},major = G.hand, bond = 'Weak'}
+config = {align="bm", offset = {x=GLOBAL_njy_action and 0.65 or -0.65,y=0.3},major = G.hand, bond = 'Weak'}
 '''
 match_indent = true
 
