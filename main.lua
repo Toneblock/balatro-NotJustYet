@@ -45,6 +45,17 @@ G.FUNCS.njy_attempt_endround = function(e)
 	end
 end
 
+local canplayref = G.FUNCS.can_play
+
+G.FUNCS.can_play = function(e)
+	if G.GAME.current_round.hands_left <= 0 then
+		e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+		e.config.button = nil
+	else
+		canplayref(e)
+	end
+end
+
 G.FUNCS.njy_endround = true	-- apparently handy uses this for detection so... here's the "function" lmao, thankfully it's not used for anything else
 
 SMODS.Atlas({
