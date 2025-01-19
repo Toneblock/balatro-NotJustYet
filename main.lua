@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Prevents scoring from ending the round early
 --- BADGE_COLOUR: ffffff
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-1103a]
---- VERSION: 0.5.3
+--- VERSION: 0.5.4
 --- PRIORITY: 1
 
 ----------------------------------------------
